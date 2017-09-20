@@ -6,7 +6,6 @@ cellbox/model/arena/Environment.class
 cellbox/model/arena/Arena.class
 cellbox/view/ViewLink.class
 cellbox/view/View.class
-cellbox/settings/Config.class
 cellbox/Manager.class
 cellbox/model/arena/MovableThread.class
 cellbox/controller/ConLink.class
@@ -18,5 +17,4 @@ cellbox/model/physics/PhysiX.class
 cellbox/controller/Controller.class
 cellbox/view/nodes/AbstractGroup.class
 cellbox/model/util/Direction.class
-cellbox/settings/Settings.class
 cellbox/view/Showgrounds.class

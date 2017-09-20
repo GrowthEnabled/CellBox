@@ -16,7 +16,6 @@ public class Movable extends Element {
     public void init(){}
 
     public void tick() {
-
     }
 
     public void move(double speed) {

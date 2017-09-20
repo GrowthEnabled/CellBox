@@ -1,9 +1,17 @@
 package cellbox.model.arena;
 
+import cellbox.model.arena.util.Loader;
+import cellbox.model.arena.util.ThreadComparator;
 import cellbox.model.element.Element;
 import cellbox.model.element.Movable;
 import cellbox.view.ViewLink;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +20,10 @@ import java.util.List;
  */
 public class Arena implements ArenaLink {
 
-    private List<MovableThread> threads = new ArrayList<MovableThread>();
+    private ObservableList<MovableThread> observableThreads = FXCollections.observableArrayList();
+    private List<MovableThread> threads = new SortedList<MovableThread>(observableThreads, new ThreadComparator());
+    private List<Element> elements = new ArrayList<>();
+    private Loader loader = new Loader();
     private int maxThreads;
     private ViewLink view;
 
@@ -26,46 +37,61 @@ public class Arena implements ArenaLink {
         }
     }
 
+
+
     public void populate(int count, Class<Movable> movableClass) {
 
-        for (int t = 0; t < maxThreads; t++) {
+        for (int i = 0; i < maxThreads; i++) {
+            observableThreads.add(new MovableThread(new ArrayList<>()));
+        }
 
-            List<Element> movables = new ArrayList<Element>();
-
-            int elems = getElemsInThread(count, t);
-
-            for (int i = 0; i < elems; i++) {
-
-                try {
-
-                    movables.add(movableClass.newInstance());
-                    if (elems * maxThreads < count
-                            && t == maxThreads - 1) {
-                        movables.add(movableClass.newInstance());
-                    }
-
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-
+        for (int i = 0; i < count; i++) {
+            try {
+                addMovable(movableClass);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
             }
-            MovableThread thread = new MovableThread(movables);
-            view.addElements(movables);
-            threads.add(thread);
+        }
+
+    }
+
+    private void addMovable(Class<? extends Movable> movableClass) throws IllegalAccessException, InstantiationException {
+        Movable m  = movableClass.newInstance();
+        elements.add(m);
+
+        System.out.println("Movable added");
+        threads.get(0).add(m);
+        view.addElement(m);
+
+    }
+
+    @Override
+    public void loadClass(File selected) {
+        try {
+            addMovable(loader.load(selected));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void generateCellTemplate(File file) {
+        try {
+            loader.generateCellTemplate(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     public void registerView(ViewLink view) {
         this.view = view;
-    }
-
-    private int getElemsInThread(int count, int index) {
-        if (index < maxThreads - 1)
-            return count / maxThreads;
-        else
-            return count / maxThreads + count % maxThreads;
     }
 
 }

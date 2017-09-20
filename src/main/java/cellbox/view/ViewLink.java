@@ -10,4 +10,6 @@ import java.util.List;
 public interface ViewLink {
 
     void addElements(List<Element> elements);
+    void addElement(Element e);
+
 }

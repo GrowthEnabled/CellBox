@@ -1,11 +1,14 @@
 package cellbox.view.nodes;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.scene.control.Cell;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 
 /**
  * Created by luca on 14.08.17.

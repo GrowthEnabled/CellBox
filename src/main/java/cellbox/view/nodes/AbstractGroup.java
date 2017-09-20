@@ -29,7 +29,7 @@ public class AbstractGroup extends Group{
     }
 
     public void setAngle(double angle) {
-        this.getTransforms().add(new Rotate(angle + 45, 0, 0));
+        this.getTransforms().add(new Rotate(- angle - 90, 0, 0));
     }
 
     public Point2D getPosition() {

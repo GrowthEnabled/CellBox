@@ -1,9 +1,11 @@
 package cellbox.controller;
 
+import cellbox.Manager;
 import cellbox.model.arena.Arena;
 import cellbox.model.element.Movable;
 import cellbox.view.ViewLink;
 
+import java.io.File;
 import java.util.Timer;
 
 /**
@@ -11,7 +13,7 @@ import java.util.Timer;
  */
 public class Controller implements ConLink {
 
-    private Timer time;
+    private Timer time = new Timer();
     private Arena arena;
     private ViewLink view;
 
@@ -19,16 +21,19 @@ public class Controller implements ConLink {
         this.arena = arena;
     }
 
-    public void start() {
+    public void init() {
         arena.populate(1, Movable.class);
         //arena.init();
         //view.show();
-        init();
     }
 
-    private void init() {
+    public void start() {
         time = new Timer();
-        time.scheduleAtFixedRate(new Ticker(arena), 0, 10);
+        time.scheduleAtFixedRate(new Ticker(arena), 0, Manager.getTimerSpeed());
+    }
+
+    public void stop() {
+        time.cancel();
     }
 
     public void registerView(ViewLink view) {
@@ -39,4 +44,16 @@ public class Controller implements ConLink {
     public void setTimerSpeed(long speed) {
         time.scheduleAtFixedRate(new Ticker(arena), 0, speed);
     }
+
+    @Override
+    public void importClass(File file) {
+        arena.loadClass(file);
+    }
+
+    @Override
+    public void generateTemplate(File file) {
+        arena.generateCellTemplate(file);
+    }
+
+
 }

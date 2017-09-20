@@ -21,4 +21,12 @@ public class MovableThread extends Thread {
         }
     }
 
+    void add(Element e) {
+        movables.add(e);
+    }
+
+    public int getCount() {
+        return movables.size();
+    }
+
 }

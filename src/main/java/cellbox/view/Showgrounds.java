@@ -20,35 +20,44 @@ public class Showgrounds extends Region{
     private ObservableList elements = root.getChildren();
 
     public Showgrounds() {
+
         addMeasuringGrid();
+        root.setMaxWidth(Manager.getShowgroundWidth());
+        root.setMaxHeight(Manager.getShowgroundHeight());
         this.getChildren().add(root);
+
     }
 
     private void addMeasuringGrid() {
+
         for (long y = 100; y < Manager.getShowgroundHeight(); y += 100) {
             Line line = new Line(0, y, Manager.getShowgroundWidth(), y);
             root.getChildren().add(line);
         }
+
         for (long x = 100; x < Manager.getShowgroundWidth(); x += 100) {
             Line line = new Line(x, 0, x, Manager.getShowgroundHeight());
             root.getChildren().add(line);
         }
+
     }
 
     public void addElement(AbstractGroup group) {
         elements.add(group);
-        elements.add(new Circle(group.getLayoutX(), group.getLayoutY(), 4, Color.BLACK));
     }
 
     protected void layoutChildren() {
+
         super.layoutChildren();
 
         for (Object element : elements) {
-            if (element instanceof Movable) {
-                double x = ((Node) element).getLayoutX();
-                double y = Manager.getShowgroundHeight() - ((Node) element).layoutYProperty().get();
-                ((Node) element).relocate(x, y);
+
+            if (element instanceof AbstractGroup) {
+                double y = Manager.getShowgroundHeight() - ((AbstractGroup) element).getLink().getPosition().getY();
+                ((AbstractGroup) element).setLayoutY(y);
+                System.out.println("Angle of the Group = " + ((AbstractGroup) element).getTransforms().get(0));
             }
+
         }
 
     }

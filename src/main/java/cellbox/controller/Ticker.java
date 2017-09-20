@@ -22,6 +22,7 @@ public class Ticker extends TimerTask {
     @Override
     public void run() {
         arena.tick();
+        System.out.println("Tick");
     }
 
 }
